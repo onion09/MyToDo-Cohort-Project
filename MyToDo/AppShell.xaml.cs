@@ -1,4 +1,5 @@
-﻿using MyToDo.Views;
+﻿using MyToDo.Models;
+using MyToDo.Views;
 using System;
 using System.Collections.Generic;
 using Xamarin.Forms;
@@ -10,6 +11,7 @@ namespace MyToDo
         public AppShell()
         {
             InitializeComponent();
+            Add.BindingContext = new ToDo(); 
 ;
         }
 

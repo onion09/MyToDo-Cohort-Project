@@ -44,7 +44,7 @@ namespace MyToDo.Views
 
         }
 
-        private async Task OnDeleteButtonClickedAsync(object sender, EventArgs e)
+        private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
             var todo = (ToDo)BindingContext;
 
@@ -53,7 +53,7 @@ namespace MyToDo.Views
                 File.Delete(todo.FileName);
             }
             editor.Text = String.Empty;
-            await Navigation.PopModalAsync();
+            //await Navigation.PopModalAsync();
 
         }
     }
