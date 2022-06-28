@@ -40,6 +40,7 @@ namespace MyToDo.Views
                         $"{Path.GetRandomFileName()}.note.txt");
             }
             File.WriteAllText(todo.FileName, editor.Text);
+            await Task.Delay(1000);
             await Navigation.PopModalAsync();
 
         }
@@ -53,7 +54,8 @@ namespace MyToDo.Views
                 File.Delete(todo.FileName);
             }
             editor.Text = String.Empty;
-            //await Navigation.PopModalAsync();
+            await Task.Delay(3000);
+            await Navigation.PopModalAsync();
 
         }
     }
