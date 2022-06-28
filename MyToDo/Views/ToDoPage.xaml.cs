@@ -7,36 +7,54 @@ using System.IO;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using MyToDo.Models;
 
 namespace MyToDo.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ToDoPage : ContentPage
     {
-        string fileName = Path.Combine(Environment.GetFolderPath(
-            Environment.SpecialFolder.LocalApplicationData), "todo.txt");
+        
         public ToDoPage()
         {
             InitializeComponent();
-            if(File.Exists(fileName))
+ 
+        }
+        protected override void OnAppearing()
+        {
+            var todo = (ToDo)BindingContext;
+            if (!string.IsNullOrEmpty(todo.FileName))
             {
-                editor.Text = File.ReadAllText(fileName);
+                editor.Text = File.ReadAllText(todo.FileName);
             }
         }
 
-        private void OnSaveButtonClicked(object sender, EventArgs e)
+        private async void OnSaveButtonClicked(object sender, EventArgs e)
         {
-            File.WriteAllText(fileName, editor.Text);
+            var todo = (ToDo)BindingContext;
+            if (string.IsNullOrEmpty(todo.FileName))
+            {
+                //create a new file
+                todo.FileName = Path.Combine(Environment.GetFolderPath(
+                        Environment.SpecialFolder.LocalApplicationData),
+                        $"{Path.GetRandomFileName()}.note.txt");
+            }
+            File.WriteAllText(todo.FileName, editor.Text);
+            await Navigation.PopModalAsync();
 
         }
 
-        private void OnDeleteButtonClicked(object sender, EventArgs e)
+        private async Task OnDeleteButtonClickedAsync(object sender, EventArgs e)
         {
-            if (File.Exists(fileName))
+            var todo = (ToDo)BindingContext;
+
+            if (File.Exists(todo.FileName))
             {
-                File.Delete(fileName);
+                File.Delete(todo.FileName);
             }
             editor.Text = String.Empty;
+            await Navigation.PopModalAsync();
+
         }
     }
 }
